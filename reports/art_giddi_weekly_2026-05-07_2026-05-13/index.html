@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>GIDDI weekly recap — May 7–13, 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Serif+Display:ital@0;1&display=swap" />
+<style>
+  :root {
+    --navy:#1b2b4b; --navy-deep:#142039; --slate:#64748b; --slate-light:#94a3b8;
+    --warm-white:#fafaf7; --cream:#f5f3ee; --cloud:#e8e5de; --card:#ffffff;
+    --coral:#e8725c; --coral-light:#fef2f0;
+    --sage:#3d9970; --sage-light:#f0f9f4;
+    --amber:#9a5b1a; --amber-light:#fbf1e6;
+    --font-sans:"DM Sans", system-ui, sans-serif;
+    --font-serif:"DM Serif Display", Georgia, serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; }
+  body {
+    background: var(--warm-white);
+    color: var(--navy);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* ---- App chrome ---------------------------------------------------- */
+  .app-shell { max-width: 920px; margin: 0 auto; padding: 40px; }
+  .crumb {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 500; color: var(--slate);
+    text-decoration: none; padding: 4px 0;
+    transition: color .15s ease;
+  }
+  .crumb:hover { color: var(--navy); }
+  .crumb svg { width: 14px; height: 14px; }
+
+  .head-row {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 16px; margin-top: 16px; flex-wrap: wrap;
+  }
+  .head-left { display: flex; flex-direction: column; gap: 10px; min-width: 0; flex: 1; }
+  h1.title {
+    font-family: var(--font-sans);
+    font-size: 30px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--navy);
+    margin: 0;
+  }
+  .meta-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+  .scope-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--cream); color: var(--navy);
+    padding: 4px 10px; border-radius: 999px;
+    font-size: 12px; font-weight: 500;
+  }
+  .scope-chip .dot {
+    width: 6px; height: 6px; border-radius: 999px; background: var(--coral);
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 3px 8px; border-radius: 999px;
+    font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .badge-shared { background: var(--sage-light); color: var(--sage); }
+
+  .updated { font-size: 11px; color: var(--slate); font-variant-numeric: tabular-nums; }
+
+  .head-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    height: 32px; padding: 0 12px; border-radius: 8px;
+    font-family: inherit; font-size: 12px; font-weight: 500; line-height: 1;
+    cursor: pointer; border: 1px solid var(--cloud);
+    background: var(--card); color: var(--navy);
+    transition: background .12s ease, border-color .12s ease;
+  }
+  .btn:hover { background: var(--cream); }
+  .btn-primary { background: var(--navy); color: var(--warm-white); border-color: var(--navy); }
+  .btn-primary:hover { background: var(--navy-deep); }
+  .btn svg { width: 13px; height: 13px; }
+
+  /* ---- Artifact card ------------------------------------------------- */
+  .artifact-card {
+    margin-top: 32px;
+    background: var(--card);
+    border: 1px solid var(--cloud);
+    border-radius: 18px;
+    padding: 28px 32px;
+  }
+  .artifact-card > * + * { margin-top: 18px; }
+
+  /* Headings within the artifact body */
+  .artifact-card h2 {
+    font-size: 22px; font-weight: 600; letter-spacing: -0.015em;
+    color: var(--navy); margin: 0;
+  }
+  .artifact-card h2 + p,
+  .artifact-card h2 + ul,
+  .artifact-card h3 + p { margin-top: 12px; }
+
+  .artifact-card h3 {
+    font-size: 15px; font-weight: 600; color: var(--navy); margin: 0;
+  }
+
+  .section-rule {
+    border: 0; border-top: 1px solid var(--cloud);
+    margin: 6px 0 0; height: 0;
+  }
+
+  /* Body paragraphs */
+  .artifact-card p {
+    margin: 0;
+    color: rgba(27, 43, 75, 0.9); /* foreground/90 */
+    font-size: 14px; line-height: 1.6;
+  }
+
+  .artifact-card strong { font-weight: 600; color: var(--navy); }
+  .artifact-card em.serif {
+    font-family: var(--font-serif); font-style: italic; font-weight: 400;
+    color: var(--navy);
+  }
+
+  /* Lists */
+  .artifact-card ul, .artifact-card ol {
+    margin: 0; padding-left: 22px;
+    display: flex; flex-direction: column; gap: 8px;
+    font-size: 14px;
+  }
+  .artifact-card ul li::marker { color: var(--slate-light); }
+  .artifact-card ol { list-style: decimal; }
+
+  /* Tables — emulates markdown-renderer.tsx output */
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--cloud);
+    border-radius: 12px;
+  }
+  table.metrics {
+    width: 100%; border-collapse: collapse; font-size: 13px;
+  }
+  table.metrics thead {
+    background: rgba(245, 243, 238, 0.6); /* muted/50 */
+  }
+  table.metrics th {
+    text-align: left;
+    padding: 10px 14px;
+    font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--slate);
+  }
+  table.metrics tbody tr { border-top: 1px solid var(--cloud); }
+  table.metrics td {
+    padding: 10px 14px;
+    font-size: 13px; color: var(--navy);
+    font-variant-numeric: tabular-nums;
+    vertical-align: top;
+  }
+
+  /* Inline emphasis chips inside table cells */
+  .delta-down { color: var(--coral); font-weight: 600; }
+  .delta-up { color: var(--sage); font-weight: 600; }
+  .delta-flat { color: var(--slate); }
+
+  /* Section labels (uppercase) — matches h4 in renderer */
+  .label-up {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--slate); margin: 0;
+  }
+
+  /* Callouts */
+  .callout {
+    background: var(--coral-light);
+    border-left: 3px solid var(--coral);
+    border-radius: 0 10px 10px 0;
+    padding: 14px 16px;
+    font-size: 13.5px;
+    color: var(--navy);
+  }
+  .callout-sage {
+    background: var(--sage-light);
+    border-left-color: var(--sage);
+  }
+  .callout-amber {
+    background: var(--amber-light);
+    border-left-color: var(--amber);
+  }
+  .callout strong { color: inherit; }
+
+  /* Mover card */
+  .mover {
+    padding: 18px 20px;
+    border: 1px solid var(--cloud);
+    border-radius: 12px;
+    background: var(--warm-white);
+  }
+  .mover + .mover { margin-top: 12px; }
+  .mover .mover-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap; margin-bottom: 8px;
+  }
+  .mover h3 { margin: 0; font-size: 15px; }
+  .mover .verdict {
+    font-size: 11px; padding: 2px 8px; border-radius: 999px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .verdict-warn { background: var(--coral-light); color: var(--coral); }
+  .verdict-good { background: var(--sage-light); color: var(--sage); }
+
+  .mover dl {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 10px 18px; margin: 12px 0 16px;
+  }
+  .mover dt {
+    font-size: 10px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--slate);
+  }
+  .mover dd {
+    margin: 2px 0 0; font-size: 14px; font-weight: 600; color: var(--navy);
+    font-variant-numeric: tabular-nums;
+  }
+  .mover dd .vs { display: block; font-weight: 400; font-size: 11px; color: var(--slate); }
+  @media (max-width: 640px) { .mover dl { grid-template-columns: repeat(2, 1fr); } }
+
+  .mover .four-part {
+    display: grid; grid-template-columns: 110px 1fr; gap: 6px 14px;
+    margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--cloud);
+    font-size: 13px;
+  }
+  .mover .four-part dt {
+    color: var(--slate); font-size: 10px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    padding-top: 2px;
+  }
+  .mover .four-part dd { margin: 0; font-weight: 400; color: var(--navy); line-height: 1.55; }
+
+  /* Watch-list */
+  .watch-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  .watch-list li {
+    border: 1px solid var(--cloud);
+    border-radius: 10px;
+    padding: 12px 14px;
+    background: var(--warm-white);
+    font-size: 13px;
+    display: grid; grid-template-columns: 18px 1fr; gap: 10px;
+    align-items: start;
+  }
+  .watch-list li .pin { color: var(--coral); font-weight: 700; }
+
+  /* Sources block */
+  .sources {
+    font-size: 12px; color: var(--slate);
+    background: var(--cream);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .sources ul { padding-left: 18px; margin: 8px 0 0; gap: 4px; }
+  .sources code {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 11.5px;
+    color: var(--navy);
+  }
+
+  /* Comments stub */
+  .comments {
+    margin-top: 32px;
+    border-top: 1px solid var(--cloud);
+    padding-top: 24px;
+  }
+  .comments h2 {
+    font-size: 14px; font-weight: 600; color: var(--navy); margin: 0 0 12px;
+  }
+  .comments .placeholder {
+    color: var(--slate); font-size: 12.5px; font-family: var(--font-serif); font-style: italic;
+  }
+
+  /* Footer signature */
+  .signature {
+    margin-top: 24px;
+    font-size: 12px; color: var(--slate);
+    display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  }
+  .signature .right { font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- Top breadcrumb -->
+  <a class="crumb" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+    Reports
+  </a>
+
+  <!-- Title row -->
+  <div class="head-row">
+    <div class="head-left">
+      <h1 class="title">GIDDI weekly recap — May 7–13, 2026</h1>
+      <div class="meta-row">
+        <span class="scope-chip"><span class="dot"></span>GIDDI</span>
+        <span class="badge badge-shared">Shared</span>
+        <span class="updated">Updated just now</span>
+      </div>
+    </div>
+    <div class="head-actions">
+      <button class="btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export
+      </button>
+      <button class="btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Edit
+      </button>
+      <button class="btn btn-primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Re-share
+      </button>
+    </div>
+  </div>
+
+  <!-- Artifact card -->
+  <article class="artifact-card">
+
+    <!-- BUSINESS CONTEXT -->
+    <h2>Business context</h2>
+    <ul>
+      <li><strong>Business:</strong> GIDDI is a direct-to-consumer brand making high-quality prostate massagers (Thor, Tomo II are the highest-margin SKUs); premium positioning, motion-tech-led, US-only ad spend on a Google Ads account managed in-house. Per BC last set 2026-03-29.</li>
+      <li><strong>Economics:</strong> AOV $130, 75% gross margin, ~$97.50 gross profit per order. LTV and repeat-purchase rate are flagged unknown in BC — the dollar translation in this recap uses AOV as the proxy and names the assumption.</li>
+      <li><strong>Goal this period:</strong> scale while improving performance. Targets: $65 CPA on Google Ads, 2.0× ROAS minimum (3.0× aspirational, blended), $30K monthly budget (flexible).</li>
+      <li><strong>Constraint:</strong> sensitive-category (no Display, no remarketing, limited audience targeting) — the lever set is Search-only.</li>
+      <li><strong>Seasonality:</strong> mid-May is non-peak; BC names Q4 / Black Friday as the peak windows. Period-over-period framing is uncomplicated by seasonality this week.</li>
+    </ul>
+
+    <hr class="section-rule" />
+
+    <!-- HEADLINE -->
+    <h2>Headline</h2>
+    <div class="callout">
+      <p><strong>The week missed both targets and reversed last week's direction.</strong> CPA closed at <strong>$111.75</strong> against the $65 target (a 72% overshoot) and ROAS at <strong>1.16×</strong> against the 2.0× floor (a 42% shortfall). Both metrics regressed week-over-week — CPA was $89.91 prior week, ROAS was 1.43×. The week's run rate ($1,899.74 / 7d) extrapolates to roughly <strong>$8.1K / month</strong>, well under the $30K cap; with BC's growth-priority lens, the account is under-pacing the budget envelope and the per-conversion economics, not the spend envelope, are the constraint to fix.</p>
+    </div>
+    <div class="callout callout-sage">
+      <p>One bright signal inside the week: <strong>Wednesday May 13 delivered 5 conversions on $212.56 spend (CPA $42.51, ROAS 3.90×) — the only day inside both targets</strong>, driven by TG_Search_Beginner (2 conv on $69.89) and Branded (2 conv on $38.48). That is the shape the account needs to hold for seven days, not one.</p>
+    </div>
+
+    <hr class="section-rule" />
+
+    <!-- TREND -->
+    <h2>Trend</h2>
+    <div class="table-wrap">
+      <table class="metrics">
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>This week</th>
+            <th>Prior week</th>
+            <th>Δ</th>
+            <th>vs target</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Spend</td><td>$1,899.74</td><td>$2,067.48</td><td class="delta-flat">−8.1%</td><td>—</td></tr>
+          <tr><td>Clicks</td><td>1,198</td><td>1,314</td><td class="delta-flat">−8.8%</td><td>—</td></tr>
+          <tr><td>Impressions</td><td>10,436</td><td>11,755</td><td class="delta-flat">−11.2%</td><td>—</td></tr>
+          <tr><td>Conversions</td><td>17</td><td>22.99</td><td class="delta-down">−26.1%</td><td>—</td></tr>
+          <tr><td>Conversion value</td><td>$2,200.99</td><td>$2,951.65</td><td class="delta-down">−25.4%</td><td>—</td></tr>
+          <tr><td>CTR</td><td>11.48%</td><td>11.18%</td><td class="delta-up">+0.30 pp</td><td>high band (p75 ≈ 8.5%)</td></tr>
+          <tr><td>Avg CPC</td><td>$1.59</td><td>$1.57</td><td class="delta-flat">+0.8%</td><td>typical p50 band ($1.50)</td></tr>
+          <tr><td><strong>CPA</strong></td><td><strong>$111.75</strong></td><td><strong>$89.91</strong></td><td class="delta-down">+24.3%</td><td><strong>$65 target — overshooting by 72%</strong></td></tr>
+          <tr><td><strong>ROAS</strong></td><td><strong>1.16×</strong></td><td><strong>1.43×</strong></td><td class="delta-down">−18.9%</td><td><strong>2.0× minimum — below low band</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><em class="serif">In our experience for DTC B2C Search; AOV $30–$300; last reviewed May 10, 2026.</em></p>
+    <p>Day-by-day, the period split cleanly: four mid-week soft days (May 8–11: 2, 2, 2, 3 conversions on $258–$341 spend), one zero-conversion day (May 12 on $263.67), then the strong Wednesday close (May 13). The May 12 zero-conversion day on $263 of spend is an isolated event in this week's data — worth watching whether it repeats — but a single day is not a trend.</p>
+    <div class="callout callout-amber">
+      <p><strong>Data-quality note (GA4 cross-check):</strong> GA4 returned 782 "conversions" on the property over the same window vs 17 in Ads. The gap is too large to be a tracking break in the Ads purchase signal — almost certainly a GA4 conversion-event-scope mismatch (the property is likely counting many event types as conversions, e.g. add-to-cart / lead). Verify which events are marked <code>is_conversion</code> in GA4; the Ads-side purchase count is the trustworthy signal for the CPA / ROAS narrative this recap is built on.</p>
+    </div>
+
+    <hr class="section-rule" />
+
+    <!-- TOP MOVERS -->
+    <h2>Top movers</h2>
+    <p>Five campaigns were active and in-scope across the period (per <code>build-campaign-manifest</code>). Three carried meaningful WoW signal worth narrating.</p>
+
+    <!-- Mover 1 -->
+    <div class="mover">
+      <div class="mover-head">
+        <h3>1. Best_Prostate_Massager_Mixed_Search_US — the volume engine softened</h3>
+        <span class="verdict verdict-warn">Action</span>
+      </div>
+      <dl>
+        <div><dt>Spend</dt><dd>$810.27<span class="vs">vs $1,070.40 (−24%)</span></dd></div>
+        <div><dt>Conversions</dt><dd>5.5<span class="vs">vs 9.67 (−43%)</span></dd></div>
+        <div><dt>CPA</dt><dd>$147.32<span class="vs">vs $110.71 (+33%)</span></dd></div>
+        <div><dt>Share of spend</dt><dd>43%<span class="vs">of account</span></dd></div>
+      </dl>
+      <p><strong>Why it matters.</strong> This is your largest non-brand cluster and your stated working surface (BC <code>current_assessment_working</code> names "select ad groups/keywords in 'best prostate massager' campaign"). The 43% conversion drop on only a 24% spend pull-back means the per-dollar efficiency dropped, not just the volume.</p>
+      <dl class="four-part">
+        <dt>Why</dt><dd>Foundations stack puts search-term drift ahead of bidding-strategy changes when CPA spikes on a stable bid strategy. The 43%-conv / 24%-spend split is the diagnostic signature.</dd>
+        <dt>Action</dt><dd>Run a search-terms n-gram pass on this campaign for the last 14 days.</dd>
+        <dt>Metric</dt><dd>Campaign-level CPA.</dd>
+        <dt>Watch</dt><dd>7 days post-negative-application. Target: campaign CPA back toward $110.</dd>
+      </dl>
+    </div>
+
+    <!-- Mover 2 -->
+    <div class="mover">
+      <div class="mover-head">
+        <h3>2. TG_BrandedThorOnly (T.Imp / Max Value) — spend doubled, efficiency collapsed</h3>
+        <span class="verdict verdict-warn">Action</span>
+      </div>
+      <dl>
+        <div><dt>Spend</dt><dd>$187.78<span class="vs">vs $78.34 (+140%)</span></dd></div>
+        <div><dt>Conversions</dt><dd>1<span class="vs">vs 2</span></dd></div>
+        <div><dt>CPA</dt><dd>$187.78<span class="vs">vs $39.17</span></dd></div>
+        <div><dt>May 11 CPC</dt><dd>$12.50<span class="vs">8 clicks on $100</span></dd></div>
+      </dl>
+      <p><strong>Why it matters.</strong> Target-Impression-Share will spend whatever the auction demands to hit share; pairing it with Max-Value on a thin conversion volume (1 conv on 5 days of spend) gives the bidder no signal to optimize against. The May 11 $12.50 CPC is the bidder buying its way to impression share at any cost — far above the account's typical $1.50–$1.60 CPC band.</p>
+      <dl class="four-part">
+        <dt>Why</dt><dd>T.Imp on thin-conversion volume will keep producing CPC spikes until the strategy is changed.</dd>
+        <dt>Action</dt><dd>Either keep T.Imp and accept the spend as brand-presence cost (and stop reading its CPA), or switch to Max Conv with a tight tCPA cap aligned to the branded segment ($30–$50).</dd>
+        <dt>Metric</dt><dd>Campaign CPA + avg CPC.</dd>
+        <dt>Watch</dt><dd>7 days post-change (clears the strategy-change learning period).</dd>
+      </dl>
+    </div>
+
+    <!-- Mover 3 -->
+    <div class="mover">
+      <div class="mover-head">
+        <h3>3. TG_Search_Health_Focus_Max.Conv — conversions evaporated on stable spend</h3>
+        <span class="verdict verdict-warn">Action</span>
+      </div>
+      <dl>
+        <div><dt>Spend</dt><dd>$355.20<span class="vs">vs $348.82 (flat)</span></dd></div>
+        <div><dt>Conversions</dt><dd>1<span class="vs">vs 4.33 (−77%)</span></dd></div>
+        <div><dt>CPA</dt><dd>$355.20<span class="vs">vs $80.56</span></dd></div>
+        <div><dt>Value per $</dt><dd>$0.39<span class="vs">of conv. value</span></dd></div>
+      </dl>
+      <p><strong>Why it matters.</strong> This is the "health/wellness angle" growth experiment from BC <code>current_assessment_growth_opportunities</code>. Stable spend with collapsed conversions is the canonical search-term-drift / quality-score-erosion pattern.</p>
+      <dl class="four-part">
+        <dt>Why</dt><dd>If the prior $80 CPA came from a tight cluster and the cluster has broadened, the sweep recovers it; if the cluster is structurally too thin, the budget is the lever instead.</dd>
+        <dt>Action</dt><dd>Same n-gram pass as Mover #1, scoped to this campaign. If the sweep doesn't recover, reduce daily budget 40%.</dd>
+        <dt>Metric</dt><dd>Campaign CPA.</dd>
+        <dt>Watch</dt><dd>14 days (Max Conv needs a learning-period buffer).</dd>
+      </dl>
+    </div>
+
+    <!-- Honorable mention -->
+    <div class="mover">
+      <div class="mover-head">
+        <h3>Honorable mention: TG_Search_Beginner_Max.Conv is improving</h3>
+        <span class="verdict verdict-good">Hold</span>
+      </div>
+      <dl>
+        <div><dt>Spend</dt><dd>$321.86<span class="vs">vs $349.18 (−7.8%)</span></dd></div>
+        <div><dt>Conversions</dt><dd>3.5<span class="vs">vs 2.0</span></dd></div>
+        <div><dt>CPA</dt><dd>$91.96<span class="vs">vs $174.59</span></dd></div>
+        <div><dt>May 13 day</dt><dd>$34.94 CPA<span class="vs">2 conv / $69.89</span></dd></div>
+      </dl>
+      <p>Not yet inside the $65 target on the period rollup but on the right trajectory — <strong>leave it alone for at least another 7 days of data.</strong></p>
+    </div>
+
+    <hr class="section-rule" />
+
+    <!-- ANOMALIES -->
+    <h2>Anomalies surfaced this week</h2>
+    <p>No Triage anomaly run was attached to this recap (anomaly-detect is owned by Triage; weekly recap does not invoke it on its own). The two issues a Triage pass would likely have surfaced are already inside the top-movers section: <strong>(a)</strong> the May 11 $12.50-CPC spike on TG_BrandedThorOnly, and <strong>(b)</strong> the May 12 zero-conversion day account-wide.</p>
+
+    <hr class="section-rule" />
+
+    <!-- WHAT WE TRIED / WHAT HAPPENED -->
+    <h2>What we tried / what happened</h2>
+    <div class="callout callout-amber">
+      <p>The Decision Log is the source of truth for "what we recommended in prior recaps and what happened." No Decision Log entries are persisted yet for this account — <code>runs/7794884054/.decisions/</code> does not exist. <strong>This is the first weekly recap for GIDDI in the Alden alpha.</strong> The stale-recommendation rule ("third week we have flagged X") is not yet load-bearing because there are no prior recaps to count against; it will become operative on the third weekly run that surfaces the same finding.</p>
+    </div>
+
+    <hr class="section-rule" />
+
+    <!-- CARRY-FORWARD -->
+    <h2>Carry-forward into next week</h2>
+    <p>Three recommendations originate from this recap; all three are net new (no carry-forward yet exists). Each carries the four-part structure inline above. Summary for the watch:</p>
+    <ol>
+      <li><strong>Search-terms n-gram sweep on Best_Prostate_Massager_Mixed_Search_US</strong> — owner: Optimizer (Negative Keyword Sweep). Watch: campaign CPA returns toward $110. Window: 7 days post-application.</li>
+      <li><strong>Bid-strategy revisit on TG_BrandedThorOnly</strong> — owner: Strategist (or kept as a manual call). Watch: campaign CPA inside $50 <em class="serif">or</em> an explicit re-classification as brand-presence spend. Window: 7 days post-change.</li>
+      <li><strong>Search-terms n-gram sweep + budget review on TG_Search_Health_Focus_Max.Conv</strong> — owner: Optimizer + Strategist. Watch: campaign CPA returns toward $80, otherwise drop daily budget 40%. Window: 14 days.</li>
+    </ol>
+
+    <hr class="section-rule" />
+
+    <!-- WHAT TO WATCH -->
+    <h2>What to watch next week</h2>
+    <ul class="watch-list">
+      <li><span class="pin">●</span><div><strong>CPA / ROAS recovery</strong> — did the headline reverse, or did this week become the new baseline? Realistic 7-day path back is $90–$110 (last prior week's level); $65 is a two-step recovery.</div></li>
+      <li><span class="pin">●</span><div><strong>TG_BrandedThorOnly avg-CPC</strong> — does the $12.50 spike repeat, or was May 11 a one-off auction price?</div></li>
+      <li><span class="pin">●</span><div><strong>Best_Prostate_Massager conversion-per-dollar</strong> — the 43% conversion drop on this campaign is the single biggest lever to fix in the account.</div></li>
+      <li><span class="pin">●</span><div><strong>Pacing / scale headroom</strong> — at $8.1K-extrapolated against a $30K cap, the budget envelope is not the constraint; the per-conversion economics are. Once CPA is back inside the band, BC's "grow account by increasing spend" objective reopens.</div></li>
+      <li><span class="pin">●</span><div><strong>GA4 conversion-event configuration</strong> — verify the event scope before any future LP audit reads GA4-side conversion-rate signal.</div></li>
+    </ul>
+
+    <hr class="section-rule" />
+
+    <!-- SOURCES -->
+    <h2>Sources</h2>
+    <div class="sources">
+      <ul>
+        <li><code>bq_account_overview</code> — period rollup (2026-05-07..2026-05-13, group_by_date both ways) and prior-7d comparison (2026-04-30..2026-05-06).</li>
+        <li><code>bq_campaign_performance</code> — per-campaign daily series for both windows.</li>
+        <li><code>ga4_run_report</code> — property 361755998, dimensions=[date], metrics=[sessions, conversions], cross-check only.</li>
+        <li><code>build-campaign-manifest</code> — audit_scope = all 5 active SEARCH campaigns.</li>
+        <li><code>assess-performance-trajectory</code> — rollups, WoW deltas, daily series, inflection points.</li>
+        <li>BC: <code>fixtures/business-context/7794884054.json</code> (date_collected 2026-03-29; notes refreshed 2026-04-22).</li>
+        <li>Benchmarks: <code>knowledge.benchmarks/b2c-ecommerce-search.md</code>, last_reviewed 2026-05-10. Applicability ($30–$300 AOV) covers GIDDI's $130 AOV.</li>
+      </ul>
+    </div>
+
+    <p class="label-up">Data-quality caveats</p>
+    <ul>
+      <li><strong>GA4 conversion-event scope</strong> — see the trend section. The Ads conversion count is treated as authoritative for this recap; the GA4 gap is flagged but not used as a signal.</li>
+      <li><strong>No sexual-wellness-specific benchmark file</strong> — fallback to the general B2C e-commerce Search file. GIDDI's 7-day CVR was 17/1198 ≈ 1.4%, sitting between the low (0.8%) and p25 (1.5%) bands — consistent with a non-peak week on a non-trivial CPA overshoot, not an anomaly in its own right.</li>
+      <li><strong>No Decision Log</strong> — the post-mortem framing arrives on recap #3 once the log is being written by prior runs.</li>
+    </ul>
+
+  </article>
+
+  <!-- Comments stub -->
+  <section class="comments">
+    <h2>Comments</h2>
+    <p class="placeholder">No comments yet — share with the client to start a thread.</p>
+  </section>
+
+  <!-- Signature -->
+  <div class="signature">
+    <span>Authored by <em class="serif">Reporter</em> · Alden Agents · alpha</span>
+    <span class="right">Run dir: <code>runs/7794884054/weekly-performance-recap/2026-05-14-1904</code></span>
+  </div>
+
+</div>
+</body>
+</html>
