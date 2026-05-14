@@ -4,31 +4,32 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Alden Reports</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap"/>
 <style>
-  body { font-family: "DM Sans", system-ui, sans-serif; background: #fafaf7; color: #1b2b4b; padding: 60px 40px; max-width: 640px; margin: 0 auto; }
-  h1 { font-size: 24px; font-weight: 600; margin: 0 0 8px; }
-  p { color: #64748b; font-size: 14px; margin: 0 0 32px; }
-  ul { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; }
-  li a {
-    display: block; padding: 14px 18px; border: 1px solid #e8e5de;
-    border-radius: 12px; background: #fff; text-decoration: none;
-    color: #1b2b4b; font-size: 14px; font-weight: 500;
-    transition: background .12s;
-  }
-  li a:hover { background: #f5f3ee; }
-  li a span { display: block; font-size: 11px; color: #64748b; font-weight: 400; margin-top: 3px; }
+  *{box-sizing:border-box}
+  body{font-family:"DM Sans",system-ui,sans-serif;background:#fafaf7;color:#1b2b4b;
+       padding:60px 40px;max-width:680px;margin:0 auto;-webkit-font-smoothing:antialiased}
+  header{margin-bottom:36px}
+  h1{font-size:22px;font-weight:600;letter-spacing:-0.015em;margin:0 0 6px}
+  .sub{font-size:13px;color:#64748b;margin:0}
+  ul{list-style:none;padding:0;display:flex;flex-direction:column;gap:10px}
+  li a{display:block;padding:14px 18px;border:1px solid #e8e5de;border-radius:12px;
+       background:#fff;text-decoration:none;color:#1b2b4b;font-size:14px;font-weight:500;
+       transition:background .12s}
+  li a:hover{background:#f5f3ee}
+  li a span{display:block;font-size:11px;color:#64748b;font-weight:400;margin-top:3px}
+  footer{margin-top:48px;font-size:11px;color:#94a3b8}
 </style>
 </head>
 <body>
-  <h1>Alden Reports</h1>
-  <p>Alpha · internal testing only</p>
+  <header>
+    <h1>Alden Reports</h1>
+    <p class="sub">Alpha · internal testing only</p>
+  </header>
   <ul>
-    <li>
-      <a href="reports/art_giddi_weekly_2026-05-07_2026-05-13/">
-        GIDDI weekly recap — May 7–13, 2026
-        <span>GIDDI · weekly-performance-recap · 2026-05-14</span>
-      </a>
-    </li>
+    <li><a href="reports/art_giddi_weekly_2026-05-07_2026-05-13/">GIDDI weekly recap — May 7–13, 2026<span>GIDDI · 2026-05-14</span></a></li>
   </ul>
+  <footer>aldenads.github.io/alden-reports · auto-published by Reporter</footer>
 </body>
 </html>
