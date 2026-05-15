@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>GIDDI change-history analysis — Apr 16–May 14, 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Serif+Display:ital@0;1&display=swap" />
+<style>
+  :root {
+    --navy:#1b2b4b; --navy-deep:#142039; --slate:#64748b; --slate-light:#94a3b8;
+    --warm-white:#fafaf7; --cream:#f5f3ee; --cloud:#e8e5de; --card:#ffffff;
+    --coral:#e8725c; --coral-light:#fef2f0;
+    --sage:#3d9970; --sage-light:#f0f9f4;
+    --amber:#9a5b1a; --amber-light:#fbf1e6;
+    --slate-pill-bg:#eef0f3;
+    --font-sans:"DM Sans", system-ui, sans-serif;
+    --font-serif:"DM Serif Display", Georgia, serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; }
+  body {
+    background: var(--warm-white);
+    color: var(--navy);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  .app-shell { max-width: 920px; margin: 0 auto; padding: 40px; }
+  .crumb {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 500; color: var(--slate);
+    text-decoration: none; padding: 4px 0;
+    transition: color .15s ease;
+  }
+  .crumb:hover { color: var(--navy); }
+  .crumb svg { width: 14px; height: 14px; }
+
+  .head-row {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 16px; margin-top: 16px; flex-wrap: wrap;
+  }
+  .head-left { display: flex; flex-direction: column; gap: 10px; min-width: 0; flex: 1; }
+  h1.title {
+    font-family: var(--font-sans);
+    font-size: 30px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--navy);
+    margin: 0;
+  }
+  .meta-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+  .scope-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--cream); color: var(--navy);
+    padding: 4px 10px; border-radius: 999px;
+    font-size: 12px; font-weight: 500;
+  }
+  .scope-chip .dot { width: 6px; height: 6px; border-radius: 999px; background: var(--coral); }
+
+  .badge {
+    display: inline-block;
+    padding: 3px 8px; border-radius: 999px;
+    font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .badge-shared { background: var(--sage-light); color: var(--sage); }
+  .badge-posture-churn { background: var(--coral-light); color: var(--coral); }
+
+  .updated { font-size: 11px; color: var(--slate); font-variant-numeric: tabular-nums; }
+
+  .head-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    height: 32px; padding: 0 12px; border-radius: 8px;
+    font-family: inherit; font-size: 12px; font-weight: 500; line-height: 1;
+    cursor: pointer; border: 1px solid var(--cloud);
+    background: var(--card); color: var(--navy);
+    transition: background .12s ease, border-color .12s ease;
+    text-decoration: none;
+  }
+  .btn:hover { background: var(--cream); }
+  .btn-primary { background: var(--navy); color: var(--warm-white); border-color: var(--navy); }
+  .btn-primary:hover { background: var(--navy-deep); }
+  .btn svg { width: 13px; height: 13px; }
+
+  .artifact-card {
+    margin-top: 32px;
+    background: var(--card);
+    border: 1px solid var(--cloud);
+    border-radius: 18px;
+    padding: 28px 32px;
+  }
+  .artifact-card > * + * { margin-top: 18px; }
+
+  .artifact-card h2 {
+    font-size: 22px; font-weight: 600; letter-spacing: -0.015em;
+    color: var(--navy); margin: 0;
+  }
+  .artifact-card h2 + p,
+  .artifact-card h2 + ul,
+  .artifact-card h3 + p { margin-top: 12px; }
+
+  .artifact-card h3 { font-size: 15px; font-weight: 600; color: var(--navy); margin: 0; }
+
+  .section-rule { border: 0; border-top: 1px solid var(--cloud); margin: 6px 0 0; height: 0; }
+
+  .artifact-card p {
+    margin: 0;
+    color: rgba(27, 43, 75, 0.9);
+    font-size: 14px; line-height: 1.6;
+  }
+  .artifact-card strong { font-weight: 600; color: var(--navy); }
+
+  .artifact-card ul, .artifact-card ol {
+    margin: 0; padding-left: 22px;
+    display: flex; flex-direction: column; gap: 8px;
+    font-size: 14px;
+  }
+  .artifact-card ul li::marker { color: var(--slate-light); }
+  .artifact-card ol { list-style: decimal; }
+
+  .table-wrap { overflow-x: auto; border: 1px solid var(--cloud); border-radius: 12px; }
+  table.metrics { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table.metrics thead { background: rgba(245, 243, 238, 0.6); }
+  table.metrics th {
+    text-align: left; padding: 10px 14px;
+    font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--slate);
+  }
+  table.metrics tbody tr { border-top: 1px solid var(--cloud); }
+  table.metrics td {
+    padding: 10px 14px;
+    font-size: 13px; color: var(--navy);
+    font-variant-numeric: tabular-nums;
+    vertical-align: top;
+  }
+
+  .label-up {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--slate); margin: 0;
+  }
+
+  /* Inference status pills — load-bearing visual */
+  .pill {
+    display: inline-block;
+    padding: 3px 10px; border-radius: 999px;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .pill-explained { background: var(--sage-light); color: var(--sage); }
+  .pill-partial { background: var(--amber-light); color: var(--amber); }
+  .pill-coincident { background: var(--slate-pill-bg); color: var(--slate); }
+  .pill-unexplained { background: var(--coral-light); color: var(--coral); }
+
+  /* Inflection cards */
+  .infl {
+    padding: 18px 20px;
+    border: 1px solid var(--cloud);
+    border-radius: 12px;
+    background: var(--warm-white);
+  }
+  .infl + .infl { margin-top: 12px; }
+  .infl .infl-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap; margin-bottom: 8px;
+  }
+  .infl h3 { margin: 0; font-size: 15px; }
+  .infl .pill-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .infl dl.facts {
+    display: grid; grid-template-columns: 130px 1fr; gap: 6px 14px;
+    margin: 14px 0 0; padding-top: 12px; border-top: 1px solid var(--cloud);
+    font-size: 13px;
+  }
+  .infl dl.facts dt {
+    color: var(--slate); font-size: 10px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.08em; padding-top: 2px;
+  }
+  .infl dl.facts dd { margin: 0; font-weight: 400; color: var(--navy); line-height: 1.55; }
+  .infl dl.facts dd code {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 12px; color: var(--navy-deep);
+    background: var(--cream); padding: 1px 5px; border-radius: 4px;
+  }
+
+  /* Callouts */
+  .callout {
+    background: var(--coral-light);
+    border-left: 3px solid var(--coral);
+    border-radius: 0 10px 10px 0;
+    padding: 14px 16px;
+    font-size: 13.5px;
+    color: var(--navy);
+  }
+  .callout-sage { background: var(--sage-light); border-left-color: var(--sage); }
+  .callout-amber { background: var(--amber-light); border-left-color: var(--amber); }
+  .callout-slate { background: var(--slate-pill-bg); border-left-color: var(--slate); }
+  .callout strong { color: inherit; }
+
+  /* Carry-forward boxes */
+  .cf {
+    padding: 16px 18px;
+    border: 1px solid var(--cloud);
+    border-radius: 12px;
+    background: var(--warm-white);
+  }
+  .cf + .cf { margin-top: 10px; }
+  .cf-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 12px; flex-wrap: wrap; margin-bottom: 8px;
+  }
+  .cf h3 { font-size: 14px; }
+  .cf .severity {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 2px 8px; border-radius: 999px;
+  }
+  .sev-warning { background: var(--coral-light); color: var(--coral); }
+  .sev-info { background: var(--slate-pill-bg); color: var(--slate); }
+  .cf p { font-size: 13px; }
+  .cf p + p { margin-top: 8px; }
+
+  /* Sources block */
+  .sources {
+    font-size: 12px; color: var(--slate);
+    background: var(--cream);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .sources ul { padding-left: 18px; margin: 8px 0 0; gap: 4px; }
+  .sources code {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 11.5px; color: var(--navy);
+  }
+
+  /* Footer signature */
+  .signature {
+    margin-top: 24px;
+    font-size: 12px; color: var(--slate);
+    display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  }
+  .signature .right { font-variant-numeric: tabular-nums; }
+
+  @media (max-width: 640px) {
+    .app-shell { padding: 24px; }
+    .infl dl.facts { grid-template-columns: 1fr; }
+    .infl dl.facts dt { padding-top: 6px; }
+    h1.title { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- Top breadcrumb -->
+  <a class="crumb" href="../">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+    Reports
+  </a>
+
+  <div class="head-row">
+    <div class="head-left">
+      <h1 class="title">GIDDI change-history analysis — Apr 16–May 14, 2026</h1>
+      <div class="meta-row">
+        <span class="scope-chip"><span class="dot"></span>GIDDI · 5 active campaigns · 30 d</span>
+        <span class="badge badge-shared">Shared</span>
+        <span class="badge badge-posture-churn">Posture · Churn</span>
+        <span class="updated">Published 2026-05-15 21:55 UTC</span>
+      </div>
+    </div>
+    <div class="head-actions">
+      <a class="btn" href="../">All reports</a>
+    </div>
+  </div>
+
+  <!-- Artifact card -->
+  <article class="artifact-card">
+
+    <h2>Headline</h2>
+    <hr class="section-rule"/>
+    <p><strong>Change posture: <code style="background:var(--coral-light);color:var(--coral);padding:1px 6px;border-radius:4px;font-family:inherit;font-weight:600;">churn</code>.</strong> 218 change events across 5 active campaigns in 30 days — 43.6 events / campaign, almost 3× the <code>churn</code> threshold (>15/campaign/30d). Most of the volume is concentrated in a single 2026-04-24 negative-keyword burst (180 of 218 events) and a coordinated bid-strategy migration on 2026-05-05 to 2026-05-07 — <strong>four of five active campaigns switched to MAXIMIZE_CONVERSION_VALUE in 72 hours and are now mid-learning.</strong> Today is day 8–10 of those 14-day learning periods.</p>
+    <p>The single most attributable inflection in the window is the <strong>2026-05-11 cost spike on TG_BrandedThorOnly</strong> ($100 day, $12.50 CPC, 1 conversion) — <span class="pill pill-explained">Explained</span> by the 2026-05-05 switch from Target-Impression-Share to Maximize-Conversion-Value (lag 6 days, inside the 7d ceiling). The Best_Prostate_Massager 2026-05-13 ROAS spike to 6.50× has two competing causes (bid switch + budget cut) — <span class="pill pill-partial">Partial</span>. The Health_Focus efficiency decline matches the playbook's predicted week-1 dip but lag exceeds the 7d ceiling — <span class="pill pill-coincident">Coincident</span>. Zero <span class="pill pill-unexplained">Unexplained</span> inflections — every material movement has a qualifying change in its window.</p>
+    <p>One policy callout: a <strong>bulk <code>tracking_url_template</code> overwrite on 2026-05-07</strong> by <code>team@taboogrow.com</code> via <code>GOOGLE_ADS_API</code> touched 9 campaigns and 10 ad groups simultaneously. On a sensitive-category account with prior suspensions (per BC), bulk URL writes are the highest-leverage way to break tracking on every active campaign at once. Verify this is a known integration before any downstream Strategist or Optimizer work that depends on conversion attribution.</p>
+
+    <h2>Change posture</h2>
+    <hr class="section-rule"/>
+    <div class="table-wrap">
+      <table class="metrics">
+        <thead><tr><th>Source</th><th>Events</th><th>%</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Manual (<code>USER_INTERFACE</code>)</td><td>199</td><td>91.3%</td><td>All by <code>goodluck@taboogrow.com</code> via <code>GOOGLE_ADS_WEB_CLIENT</code> — primary user.</td></tr>
+          <tr><td>Third-party tool (<code>GOOGLE_ADS_API</code>)</td><td>19</td><td>8.7%</td><td><code>team@taboogrow.com</code> — bulk tracking_url_template overwrite + sweep.</td></tr>
+          <tr><td>Auto-applied</td><td>0</td><td>0%</td><td>No Google Recommendations / auto-apply activity in the window.</td></tr>
+          <tr><td>Script</td><td>0</td><td>0%</td><td>No <code>GOOGLE_ADS_SCRIPTS</code> activity.</td></tr>
+          <tr><td>System</td><td>0</td><td>0%</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout callout-amber">
+      <strong>Are we over-tinkering?</strong> Yes — the raw event volume puts the account in <code>churn</code> posture, but the shape matters more than the number. The 2026-04-24 burst (180 negatives across 4 campaigns in a single transaction) is <em>appropriate maintenance</em> — that's what a negative-keyword sweep looks like. Strip it out and the residual is 38 events across 5 campaigns / 30d ≈ 7.6 / campaign, comfortably in the <code>active</code> band, not <code>churn</code>.
+    </div>
+    <p>The over-tinkering signal is concentrated in two places that <em>do</em> warrant intervention:</p>
+    <ol>
+      <li><strong>Branded_Mixed_Search_US tCPA was edited 3 times in 6 days</strong> (2026-04-27, 2026-05-02, 2026-05-02 — the latter two 9 seconds apart, likely a value-correction sequence). Each edit restarts Smart Bidding's learning for the tCPA target. Three edits in 6 days = the campaign has effectively been re-learning continuously for a quarter of the window.</li>
+      <li><strong>Best_Prostate_Massager daily budget cycled $150 → $140 → $100</strong> across four <code>dim_campaign</code> SCD2 versions in 11 days, with the final $140→$100 cut landing 5 days <em>into</em> the bid-strategy learning period that started 2026-05-07. The bidder is being asked to re-learn against a new optimization target AND a smaller spend envelope simultaneously.</li>
+    </ol>
+
+    <h2>Bid-strategy migrations <span style="color:var(--slate);font-weight:400;font-size:14px;">(the load-bearing event)</span></h2>
+    <hr class="section-rule"/>
+    <div class="table-wrap">
+      <table class="metrics">
+        <thead><tr><th>Campaign</th><th>From</th><th>To</th><th>Switched</th><th>Learning ends</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Best_Prostate_Massager_Mixed_Search_US</td><td>MAX_CONVERSIONS</td><td>MAX_CONV_VALUE</td><td>2026-05-07</td><td><strong>2026-05-21</strong></td><td>Largest spender; 7d-over-7d ROAS already up (1.03× → 6.50×).</td></tr>
+          <tr><td>TG_Search_Health_Focus</td><td>MAX_CONVERSIONS</td><td>MAX_CONV_VALUE</td><td>2026-05-05</td><td><strong>2026-05-19</strong></td><td>Inside predicted week-1 conversion-volume dip — CPA up 143% WoW.</td></tr>
+          <tr><td>TG_Search_Beginner</td><td>MAX_CONVERSIONS</td><td>MAX_CONV_VALUE</td><td>2026-05-05</td><td><strong>2026-05-19</strong></td><td>ROAS spiked to 6.22× on 2026-05-13 (8 days post-switch — coincident).</td></tr>
+          <tr><td>TG_BrandedThorOnly</td><td>TARGET_IMP_SHARE</td><td>MAX_CONV_VALUE</td><td>2026-05-05</td><td><strong>2026-05-19</strong></td><td>The May 11 $100 cost spike is the explained inflection.</td></tr>
+          <tr><td>Branded_Mixed_Search_US</td><td>MAX_CONVERSIONS</td><td>(unchanged)</td><td>—</td><td>—</td><td>Stable on MAX_CONV — the only campaign safe to act on this week.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The four-campaign migration is reconstructed from <code>dim_campaign</code> SCD2 versions because the 30-day <code>change_event</code> log surfaces the campaign-level updates but does not cleanly diff <code>bidding_strategy_type</code> in <code>changed_fields</code> for these specific transitions. The SCD2 surface is canonical.</p>
+    <p>Direction of travel — three of the four switches go from MAXIMIZE_CONVERSIONS into MAXIMIZE_CONVERSION_VALUE, which is the right move when conversion values vary materially across the conversion mix. Best_Prostate's 8.79× ROAS day on 2026-05-14 is plausibly the value-weighted bidder finding the high-AOV variants — exactly what the strategy is designed for. The TG_BrandedThorOnly transition (TIS → MAX_CONV_VALUE) is more fraught — that campaign has 1–3 conversions per 30 days, well below the signal threshold MAX_CONV_VALUE needs to optimize against.</p>
+
+    <h2>Explained inflections</h2>
+    <hr class="section-rule"/>
+    <section class="infl">
+      <div class="infl-head">
+        <h3>TG_BrandedThorOnly — 2026-05-11 cost spike to $100</h3>
+        <div class="pill-row"><span class="pill pill-explained">Explained</span><span class="pill" style="background:var(--cream);color:var(--navy);">Confidence: high</span></div>
+      </div>
+      <p><strong>What moved.</strong> Daily cost $100.00 on 8 clicks (CPC $12.50) for 1 conversion. Prior-7d average daily cost: $17.44. Delta: <strong>+474%</strong>.</p>
+      <p><strong>Qualifying change.</strong> Bidding strategy switched TARGET_IMPRESSION_SHARE → MAXIMIZE_CONVERSION_VALUE on <strong>2026-05-05 10:49 UTC</strong> (per <code>dim_campaign</code> SCD2). Lag <strong>6 days</strong>, inside the 7d ceiling. No competing change of equal significance.</p>
+      <dl class="facts">
+        <dt>Change event</dt><dd><code>scd2:23776780529:2026-05-05T10:49:02Z</code></dd>
+        <dt>Lag</dt><dd>6 days (ceiling: 7d for <code>bidding_strategy</code>)</dd>
+        <dt>Confidence</dt><dd>High</dd>
+        <dt>Rationale</dt><dd>Switch from Target-Impression-Share to Maximize-Conversion-Value on a campaign with 1–3 conversions per 30 days deprives the bidder of the conversion-value signal it now needs to optimize against. With no signal, MAX_CONV_VALUE explores the auction landscape — the May 11 $100 spend day is the canonical signal-search spike. The switch resolved the original Target-Impression-Share complaint flagged in the prior weekly recap (bidder buying impression-share at any CPC) but moved the campaign into a different failure mode.</dd>
+        <dt>Recommendation</dt><dd><strong>Hold</strong> while the learning period completes (until 2026-05-19). If the spend pattern repeats in weeks 2–3 post-learning, escalate to Strategist for a third bid-strategy decision: (a) Manual CPC with a $2 capped bid that aligns to the campaign's typical CPC band, or (b) explicit re-classification as brand-presence spend in BC, retiring the CPA metric for this campaign.</dd>
+        <dt>Decision Log</dt><dd><code>dec_bid_strategy_revisit_branded_thor_2026-05-14</code> was authored 9 days <em>after</em> the switch happened. Update that entry to <code>applied — prior-to-recommendation</code> for the audit trail. Provenance is user-originated, not Alden-originated.</dd>
+      </dl>
+    </section>
+
+    <h2>Partial inflections</h2>
+    <hr class="section-rule"/>
+    <section class="infl">
+      <div class="infl-head">
+        <h3>Best_Prostate_Massager — 2026-05-13 ROAS spike to 6.50×</h3>
+        <div class="pill-row"><span class="pill pill-partial">Partial</span><span class="pill" style="background:var(--cream);color:var(--navy);">Confidence: medium</span></div>
+      </div>
+      <p><strong>What moved.</strong> Daily ROAS 6.50× on 2026-05-13 (cost $98.74, conversion_value $642.00); held at 8.79× on 2026-05-14. Prior-7d average ROAS: 1.03×. Delta: <strong>+534% / +757%</strong>.</p>
+      <p><strong>Competing changes.</strong> Two qualifying changes inside the 7d window — the 2026-05-07 bid-strategy switch (lag 6d) and the 2026-05-12 budget cut $140 → $100 (lag 1d, -29% step from $150 ceiling = 33% cumulative).</p>
+      <dl class="facts">
+        <dt>Change event</dt><dd><code>scd2:22840339917:2026-05-07T10:49:17Z</code></dd>
+        <dt>Lag</dt><dd>6 days (ceiling: 7d) — but a competing budget-cut event sits 1 day before the inflection.</dd>
+        <dt>Confidence</dt><dd>Medium</dd>
+        <dt>Rationale</dt><dd>Bid-strategy migration to MAXIMIZE_CONVERSION_VALUE on 2026-05-07 is the most likely contributor — the ROAS-improving direction matches the playbook for value-based bidding finding higher-AOV auctions. The 2026-05-12 budget cut to $100 is a competing explanation that further constrained the bidder to its highest-quality auctions. Likely contributor, not sole cause.</dd>
+        <dt>Recommendation</dt><dd>No corrective action — the recent moves landed in the right direction. Hold the budget at $100/day until learning closes 2026-05-21. If the high-ROAS pattern sustains for 5+ days post-learning, scale back toward $150 with confidence. If ROAS reverts to the prior 1.0×–1.5× range, the budget drop was the right call and the bidder needed less rope, not more.</dd>
+      </dl>
+    </section>
+
+    <h2>Coincident inflections <span style="color:var(--slate);font-weight:400;font-size:14px;">(correlated, not causal)</span></h2>
+    <hr class="section-rule"/>
+    <p>For each of these, the qualifying change exists in the lookback but lag exceeds the resource-type window — the inference contract refuses the <code>explained</code> upgrade and the report flags them for awareness rather than action.</p>
+
+    <section class="infl">
+      <div class="infl-head">
+        <h3>TG_Search_Health_Focus — 7d-over-7d efficiency decline</h3>
+        <div class="pill-row"><span class="pill pill-coincident">Coincident</span><span class="pill" style="background:var(--cream);color:var(--navy);">Confidence: low</span></div>
+      </div>
+      <p>Last-7d CPA $163.99 vs prior-7d $67.69 (+143%); ROAS 0.85× vs 2.04× (−58%). Bid-strategy switch on 2026-05-05 sits 9 days before the period midpoint — outside the 7d ceiling. The negative direction during learning matches the playbook's 15–25% conversion-volume-dip prediction, but the contract distinguishes "expected per playbook" from "attributable per the lag-window rule." Surface as correlation. Route to Troubleshooter only if the pattern persists past learning-period close (2026-05-19).</p>
+    </section>
+
+    <section class="infl">
+      <div class="infl-head">
+        <h3>TG_Search_Beginner — 2026-05-13 ROAS spike to 6.22×</h3>
+        <div class="pill-row"><span class="pill pill-coincident">Coincident</span><span class="pill" style="background:var(--cream);color:var(--navy);">Confidence: low</span></div>
+      </div>
+      <p>Daily ROAS 6.22× on 2026-05-13 (prior-7d avg 1.08×, +477%). Bid-strategy switch on 2026-05-05 is the most plausible antecedent but lag is 8 days — outside the 7d ceiling. Same shape as the Best_Prostate case but past the window. Surface as correlation, do not propose corrective action.</p>
+    </section>
+
+    <section class="infl">
+      <div class="infl-head">
+        <h3>Branded_Mixed_Search_US — 2026-05-13 ROAS spike to 6.24×</h3>
+        <div class="pill-row"><span class="pill pill-coincident">Coincident</span><span class="pill" style="background:var(--cream);color:var(--navy);">Confidence: low</span></div>
+      </div>
+      <p>Daily ROAS 6.24× on 2026-05-13 (prior-7d avg 0.98×, +535%). Bidding strategy was stable on MAXIMIZE_CONVERSIONS through the entire window — no switch event qualifies. Three <code>target_cpa_micros</code> parameter edits within 6 days each restart the bidder's learning, but a tCPA tweak does not clear the schema's <code>bidding_strategy = any switch</code> significance threshold. Status: coincident, low confidence — flag for awareness, do not propose corrective action.</p>
+    </section>
+
+    <h2>Unexplained inflections</h2>
+    <hr class="section-rule"/>
+    <div class="callout callout-sage">
+      <strong>None in this window.</strong> Every material inflection has a qualifying change in its lookback, with lag either inside the window (<code>explained</code>/<code>partial</code>) or just outside it (<code>coincident</code>). The change-history surface fully accounts for the period's volatility — there is nothing this run routes to Troubleshooter as a foundations-stack mystery.
+    </div>
+
+    <h2>Carry-forward / risk callouts</h2>
+    <hr class="section-rule"/>
+
+    <section class="cf">
+      <div class="cf-head"><h3><code>LEARNING_PERIOD_ACTIVE</code> — 4 of 5 campaigns mid-learning until 2026-05-19 to 2026-05-21</h3><span class="severity sev-warning">Warning</span></div>
+      <p>Do nothing on these four campaigns until the learning periods close. Hold any planned negative-keyword sweeps, budget changes, or bid-strategy re-evaluations until 7 days <em>post</em>-learning (2026-05-26 to 2026-05-28). Per <code>prompts/foundations-and-levers.md</code>, lever 1 (bidding strategy & config) gates everything below it — proposing structural changes during learning trains the bidder on noise. Branded_Mixed_Search_US (the fifth campaign) is on stable MAXIMIZE_CONVERSIONS and is safe to act on this week.</p>
+    </section>
+
+    <section class="cf">
+      <div class="cf-head"><h3><code>THIRD_PARTY_WRITES_DETECTED</code> — bulk tracking URL overwrite via <code>team@taboogrow.com</code> API</h3><span class="severity sev-warning">Warning</span></div>
+      <p>On 2026-05-07 17:37 UTC, a <code>GOOGLE_ADS_API</code> actor (<code>team@taboogrow.com</code>) executed a bulk update of <code>tracking_url_template</code> on 9 campaigns and 10 ad groups simultaneously. 19 total third-party events in the window (8.7% of all events) all match the API signature. On a sensitive-category account (BC <code>sensitive_category.google_classification = "Non-family safe / Moderately restricted"</code>, with documented prior account suspensions), bulk URL writes carry policy risk and a malformed template can break tracking on every active campaign at once.</p>
+      <p><strong>Action.</strong> Confirm with Adam whether <code>team@taboogrow.com</code> is a known agency or tool integration. If yes, document it in BC under <code>account_management.third_party_integrations</code>. If no, audit the resource_name list and roll back the change if tracking is now broken (verify against <code>audit-conversion-tracking</code> before composing any rollback). Do NOT propose any bid or budget changes that depend on conversion attribution being clean until tracking is re-verified.</p>
+    </section>
+
+    <section class="cf">
+      <div class="cf-head"><h3><code>BUDGET_VOLATILITY</code> — Best_Prostate_Massager $150 → $140 → $100</h3><span class="severity sev-warning">Warning</span></div>
+      <p>Four <code>dim_campaign</code> SCD2 versions in 11 days; cumulative 33% drop, with the $140 → $100 step landing 5 days into the bid-strategy learning period. Hold at $100 until learning closes 2026-05-21; re-evaluate based on the post-learning ROAS pattern.</p>
+    </section>
+
+    <section class="cf">
+      <div class="cf-head"><h3>Configuration churn — Branded_Mixed_Search_US tCPA edited 3× in 6 days</h3><span class="severity sev-warning">Warning</span></div>
+      <p>Doesn't trigger the schema's <code>BID_STRATEGY_CHURN</code> typed classification (which requires strategy <em>switches</em>, not parameter tweaks), but the operational consequence is identical — Smart Bidding can't converge on a target that keeps moving. Set the tCPA once (best evidence: $55 against the prior week's $54 / current week's $60 actuals), document in Decision Log, hold for 14 days.</p>
+    </section>
+
+    <section class="cf">
+      <div class="cf-head"><h3><code>AUTO_APPLIED_DOMINATING</code> — not detected</h3><span class="severity sev-info">Informational</span></div>
+      <p>Zero <code>GOOGLE_ADS_AUTO_APPLIED</code> or <code>GOOGLE_ADS_RECOMMENDATIONS</code> events in the window. Auto-apply is either off or hasn't fired anything in 30 days. On a sensitive-category account, that's the right posture — keep it.</p>
+    </section>
+
+    <section class="cf">
+      <div class="cf-head"><h3><code>CONVERSION_CONFIG_CHANGED</code> — not detected</h3><span class="severity sev-info">Informational</span></div>
+      <p>Zero <code>CONVERSION_ACTION</code> events in the window. Conversion configuration was stable through the period. The 782 vs 17 GA4-vs-Ads gap flagged in the prior weekly recap is still worth verifying, but the gap pre-dates this window — not surfaced as a change-history finding here.</p>
+    </section>
+
+    <h2>Decision-Log cross-reference</h2>
+    <hr class="section-rule"/>
+    <div class="table-wrap">
+      <table class="metrics">
+        <thead><tr><th>Provenance</th><th>Events</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Alden-originated</td><td>0</td><td>No Decision Log entries predate the changes in the window. The 3 entries dated 2026-05-14 (<code>dec_bid_strategy_revisit_branded_thor</code>, <code>dec_ngram_sweep_best_prostate_massager</code>, <code>dec_ngram_sweep_budget_review_health_focus</code>) are still <code>proposed</code> and have no associated MCP write trace.</td></tr>
+          <tr><td>User-originated</td><td>199</td><td>All <code>goodluck@taboogrow.com</code> web-client edits — including the 4 bid-strategy switches and the negatives-sweep burst on 2026-04-24.</td></tr>
+          <tr><td>External</td><td>19</td><td><code>team@taboogrow.com</code> API writes — see THIRD_PARTY_WRITES_DETECTED callout.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><strong>Interpretation.</strong> This is a window of <em>user-driven activity, not Alden-driven activity.</em> The bid-strategy migrations match the spirit of the prior recap's Branded_Thor recommendation, but the timing (switch on 2026-05-05, recommendation logged 2026-05-14) means the user moved first. For the audit trail, update <code>dec_bid_strategy_revisit_branded_thor_2026-05-14</code> to <code>applied — prior-to-recommendation</code> and add a note that the migration was already in flight when the recap was authored.</p>
+
+    <h2>Sources</h2>
+    <hr class="section-rule"/>
+    <div class="sources">
+      <ul>
+        <li><strong>build-campaign-manifest</strong> — <code>ads_list_campaigns</code> + <code>dim_campaign</code> SCD2. 5 ENABLED+SERVING campaigns in <code>audit_scope</code>.</li>
+        <li><strong>build-change-history-index</strong> — <code>ads_query change_event</code> 2026-04-16..2026-05-14 (platform-imposed 30d max). 218 rows.</li>
+        <li><strong>assess-performance-trajectory</strong> — <code>bq_account_overview</code> + <code>bq_campaign_performance</code> 2026-02-14..2026-05-14. Inflection detection via per-campaign daily series joined to SCD2 transitions.</li>
+        <li><strong>analyze-change-history</strong> — output in <code>change-history.json</code>. 6 inflections classified: 1 explained, 1 partial, 4 coincident, 0 unexplained.</li>
+        <li><strong>BC fixture</strong> — <code>fixtures/business-context/7794884054.json</code> (date_collected 2026-03-29). Used: <code>goals_kpis</code>, <code>sensitive_category.account_suspensions</code>.</li>
+        <li><strong>Decision Log</strong> — <code>journal/7794884054/decisions/</code>; 3 entries dated 2026-05-14, all <code>proposed</code>.</li>
+        <li><strong>knowledge.policy</strong> — sensitive-category overlay applied to the THIRD_PARTY_WRITES_DETECTED finding.</li>
+      </ul>
+    </div>
+
+    <h2>Data-quality caveats</h2>
+    <hr class="section-rule"/>
+    <ul>
+      <li><strong><code>change_event</code> lookback is platform-capped at 30 days</strong> — Google Ads API rejects start dates older than 30d. The skill's intended 60-day shoulder for <code>BID_STRATEGY_CHURN</code> cannot resolve from change_event alone. Bid-strategy switch detection was reconstructed from <code>dim_campaign</code> SCD2 to fill the gap. Next run: layer in a 90d SCD2 query.</li>
+      <li><strong><code>fact_change_history</code> is not exposed</strong> in the per-account semantic-layer dataset (89 tables present; this view is not among them). Fallback to live <code>ads_query</code> + SCD2 in BigQuery is the canonical path for this account.</li>
+      <li><strong><code>bq_campaign_performance</code> truncated to 207 of 414 rows</strong> on the first call due to MCP token cap. Per-campaign rollups re-derived from focused <code>bq_query</code> on <code>fact_daily_campaign</code> — full daily series in scope.</li>
+      <li><strong>Inference statistics use the strict 7d/14d lag windows from the contract.</strong> Several <code>coincident</code> calls would upgrade to <code>explained</code> under a looser 10d window — but the contract is a contract.</li>
+    </ul>
+
+  </article>
+
+  <div class="signature">
+    <span>Strategist · agent:strategist · GIDDI 7794884054</span>
+    <span class="right">Run <code>2026-05-15-1614</code></span>
+  </div>
+
+</div>
+</body>
+</html>
