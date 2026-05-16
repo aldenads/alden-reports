@@ -244,11 +244,131 @@
   }
   .signature .right { font-variant-numeric: tabular-nums; }
 
+  /* ---- Digest panel (30-second read) ----------------------------- */
+  .digest {
+    background: linear-gradient(180deg, #fcfbf6 0%, #fafaf7 100%);
+    border: 1px solid var(--cloud);
+    border-radius: 14px;
+    padding: 24px 26px;
+    margin-bottom: 8px;
+  }
+  .digest-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 12px; flex-wrap: wrap; margin-bottom: 14px;
+  }
+  .digest-head .eyebrow {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--slate);
+  }
+  .digest-head .read-time {
+    font-size: 11px; color: var(--slate); font-variant-numeric: tabular-nums;
+  }
+  .digest .verdict {
+    font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em;
+    margin: 0 0 6px; color: var(--navy);
+  }
+  .digest .verdict-sub {
+    font-size: 13.5px; line-height: 1.55; color: rgba(27, 43, 75, 0.78);
+    margin: 0 0 18px;
+  }
+
+  /* Campaign status grid */
+  .camp-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 8px; margin: 0 0 18px;
+  }
+  @media (min-width: 740px) { .camp-grid { grid-template-columns: repeat(2, 1fr); } }
+  .camp {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2px 12px;
+    padding: 12px 14px;
+    background: var(--card);
+    border: 1px solid var(--cloud);
+    border-radius: 10px;
+  }
+  .camp .camp-name {
+    font-size: 13px; font-weight: 600; color: var(--navy);
+    grid-column: 1; min-width: 0;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .camp .camp-pill { grid-column: 2; align-self: start; }
+  .camp .camp-meta {
+    grid-column: 1 / -1;
+    font-size: 11.5px; color: var(--slate);
+    display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+    margin-top: 4px;
+  }
+  .camp .camp-meta .dir { font-weight: 600; }
+  .camp .camp-meta .dir-up    { color: var(--sage); }
+  .camp .camp-meta .dir-down  { color: var(--coral); }
+  .camp .camp-meta .dir-flat  { color: var(--slate); }
+  .camp .camp-meta .dir-warn  { color: var(--amber); }
+  .camp .camp-meta .sep { color: var(--slate-light); }
+
+  .pill-learning { background: var(--amber-light); color: var(--amber); }
+  .pill-stable   { background: var(--sage-light); color: var(--sage); }
+
+  /* Action rows in the digest */
+  .digest .actions {
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .digest .action {
+    display: grid; grid-template-columns: 78px 1fr;
+    gap: 10px 14px; padding: 12px 14px;
+    background: var(--card);
+    border: 1px solid var(--cloud);
+    border-radius: 10px;
+    font-size: 13px;
+  }
+  .digest .action .tag {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--slate);
+    align-self: start; padding-top: 2px;
+  }
+  .digest .action.action-verify .tag { color: var(--coral); }
+  .digest .action.action-expect .tag { color: var(--amber); }
+  .digest .action.action-hold   .tag { color: var(--sage); }
+  .digest .action p { margin: 0; line-height: 1.55; color: rgba(27, 43, 75, 0.9); }
+  .digest .action strong { color: var(--navy); }
+
+  /* Toggle to deep read */
+  details.deep-toggle {
+    border-top: 1px solid var(--cloud);
+    padding-top: 20px;
+    margin-top: 4px;
+  }
+  details.deep-toggle > summary {
+    cursor: pointer; list-style: none;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 16px;
+    border: 1px solid var(--cloud); border-radius: 10px;
+    background: var(--card);
+    font-size: 13px; font-weight: 500; color: var(--navy);
+    transition: background .12s ease;
+    user-select: none;
+  }
+  details.deep-toggle > summary::-webkit-details-marker { display: none; }
+  details.deep-toggle > summary:hover { background: var(--cream); }
+  details.deep-toggle > summary::after {
+    content: "↓";
+    font-size: 13px; color: var(--slate);
+    transition: transform .15s ease;
+  }
+  details.deep-toggle[open] > summary::after { transform: rotate(180deg); }
+  details.deep-toggle[open] > summary { margin-bottom: 18px; }
+  details.deep-toggle > .summary-hint {
+    display: inline-block; margin-left: 12px;
+    font-size: 12px; color: var(--slate);
+  }
+
   @media (max-width: 640px) {
     .app-shell { padding: 24px; }
     .infl dl.facts { grid-template-columns: 1fr; }
     .infl dl.facts dt { padding-top: 6px; }
     h1.title { font-size: 24px; }
+    .camp-grid { grid-template-columns: 1fr; }
+    .digest .action { grid-template-columns: 1fr; gap: 4px; }
   }
 </style>
 </head>
@@ -278,6 +398,84 @@
 
   <!-- Artifact card -->
   <article class="artifact-card">
+
+    <!-- ============ Digest panel (30-second read) ============ -->
+    <section class="digest">
+      <div class="digest-head">
+        <span class="eyebrow">At a glance</span>
+        <span class="read-time">30-second read</span>
+      </div>
+
+      <p class="verdict">This week: mostly hands-off. 4 of 5 campaigns are mid-learning from a coordinated bid-strategy migration.</p>
+      <p class="verdict-sub">Between May 5 and May 7, four campaigns switched into MAXIMIZE_CONVERSION_VALUE. Learning periods close May 19 (three campaigns) and May 21 (Best_Prostate). Don't touch any of them until then. <strong>Branded_Mixed_Search_US is the only campaign safe to act on this week.</strong></p>
+
+      <div class="camp-grid">
+        <div class="camp">
+          <span class="camp-name">Best_Prostate_Massager</span>
+          <span class="pill pill-learning">Learning</span>
+          <span class="camp-meta">
+            <span class="dir dir-up">↑ ROAS 1.03× → 6.50×</span>
+            <span class="sep">·</span>
+            <span>Until May 21</span>
+          </span>
+        </div>
+        <div class="camp">
+          <span class="camp-name">Branded_Mixed_Search_US</span>
+          <span class="pill pill-stable">Stable</span>
+          <span class="camp-meta">
+            <span class="dir dir-flat">→ Max-Conv, unchanged</span>
+            <span class="sep">·</span>
+            <span>Safe to act on</span>
+          </span>
+        </div>
+        <div class="camp">
+          <span class="camp-name">TG_Search_Beginner</span>
+          <span class="pill pill-learning">Learning</span>
+          <span class="camp-meta">
+            <span class="dir dir-up">↑ ROAS spike May 13</span>
+            <span class="sep">·</span>
+            <span>Until May 19</span>
+          </span>
+        </div>
+        <div class="camp">
+          <span class="camp-name">TG_Search_Health_Focus</span>
+          <span class="pill pill-learning">Learning</span>
+          <span class="camp-meta">
+            <span class="dir dir-down">↓ CPA $68 → $164</span>
+            <span class="sep">·</span>
+            <span>Until May 19</span>
+          </span>
+        </div>
+        <div class="camp">
+          <span class="camp-name">TG_BrandedThorOnly</span>
+          <span class="pill pill-learning">Learning</span>
+          <span class="camp-meta">
+            <span class="dir dir-warn">⚠ Signal-starved bidder</span>
+            <span class="sep">·</span>
+            <span>Until May 19</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="actions">
+        <div class="action action-verify">
+          <span class="tag">Verify</span>
+          <p><strong>Bulk tracking URL overwrite by <code>team@taboogrow.com</code> on May 7.</strong> A <code>GOOGLE_ADS_API</code> actor (not the primary user) overwrote <code>tracking_url_template</code> on 9 campaigns + 10 ad groups in one transaction. Confirm it's a known agency / tool integration before any work that depends on conversion attribution. Document it in BC so this stops re-flagging.</p>
+        </div>
+        <div class="action action-expect">
+          <span class="tag">Expect</span>
+          <p><strong>TG_BrandedThorOnly will keep having signal-starved spend spikes after May 19.</strong> With 1–3 conversions per 30 days on Maximize-Conversion-Value, the bidder has no value signal to optimize against — the May 11 $100 / $12.50 CPC day is the explained inflection. After learning closes, plan a third bid-strategy decision: cap bids manually <em>or</em> re-classify as brand-presence spend.</p>
+        </div>
+        <div class="action action-hold">
+          <span class="tag">Hold</span>
+          <p><strong>Don't read CPA/ROAS as performance signal on the four mid-learning campaigns this week.</strong> Best_Prostate's 6.50× → 8.79× ROAS surge is plausibly real, but two competing causes (bid switch + budget cut) sit inside the same window — wait for post-learning data before scaling back up.</p>
+        </div>
+      </div>
+    </section>
+
+    <details class="deep-toggle">
+      <summary>Read the full analysis</summary>
+      <span class="summary-hint">Posture math, inflection cards with the four-status inference, sources, data-quality caveats</span>
 
     <h2>Headline</h2>
     <hr class="section-rule"/>
@@ -466,6 +664,8 @@
       <li><strong><code>bq_campaign_performance</code> truncated to 207 of 414 rows</strong> on the first call due to MCP token cap. Per-campaign rollups re-derived from focused <code>bq_query</code> on <code>fact_daily_campaign</code> — full daily series in scope.</li>
       <li><strong>Inference statistics use the strict 7d/14d lag windows from the contract.</strong> Several <code>coincident</code> calls would upgrade to <code>explained</code> under a looser 10d window — but the contract is a contract.</li>
     </ul>
+
+    </details>
 
   </article>
 
